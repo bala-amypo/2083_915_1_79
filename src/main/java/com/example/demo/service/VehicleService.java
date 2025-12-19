@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Vehicle;
 
 import java.util.List;
-
+@Service
 // Service interface for Vehicle related operations
 public interface VehicleService {
 

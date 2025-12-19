@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Shipment;
-
+@Service
 // Service interface for Shipment operations
 public interface ShipmentService {
 

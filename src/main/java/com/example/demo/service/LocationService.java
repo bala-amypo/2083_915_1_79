@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Location;
 
 import java.util.List;
-
+@Service
 // Service interface for Location operations
 public interface LocationService {
 
