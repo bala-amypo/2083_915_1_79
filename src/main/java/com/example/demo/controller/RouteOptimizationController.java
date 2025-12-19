@@ -1,30 +1,29 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.RouteOptimizationResult;
 import com.example.demo.service.RouteOptimizationService;
+import org.springframework.web.bind.annotation.*;
 
+// Handles route optimization APIs
 @RestController
 @RequestMapping("/optimize")
 public class RouteOptimizationController {
 
-    private final RouteOptimizationService optimizationService;
+    private final RouteOptimizationService routeOptimizationService;
 
-    public RouteOptimizationController(
-            RouteOptimizationService optimizationService) {
-        this.optimizationService = optimizationService;
+    public RouteOptimizationController(RouteOptimizationService routeOptimizationService) {
+        this.routeOptimizationService = routeOptimizationService;
     }
 
+    // Generate optimized route
     @PostMapping("/{shipmentId}")
-    public RouteOptimizationResult optimize(
-            @PathVariable Long shipmentId) {
-        return optimizationService.optimizeRoute(shipmentId);
+    public RouteOptimizationResult optimizeRoute(@PathVariable Long shipmentId) {
+        return routeOptimizationService.optimizeRoute(shipmentId);
     }
 
+    // Get optimization result by id
     @GetMapping("/result/{resultId}")
-    public RouteOptimizationResult getResult(
-            @PathVariable Long resultId) {
-        return optimizationService.getResult(resultId);
+    public RouteOptimizationResult getResult(@PathVariable Long resultId) {
+        return routeOptimizationService.getResult(resultId);
     }
 }
