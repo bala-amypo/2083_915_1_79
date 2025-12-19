@@ -1,13 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Shipment;
+import java.util.List;
 
-// Service interface for Shipment operations
 public interface ShipmentService {
 
-    // Create shipment for a vehicle
-    Shipment createShipment(Long vehicleId, Shipment shipment);
+    Shipment createShipment(Shipment shipment);
 
-    // Get shipment by id
-    Shipment getShipment(Long shipmentId);
+    Shipment getShipmentById(Long id);
+
+    List<Shipment> getAllShipments();
 }

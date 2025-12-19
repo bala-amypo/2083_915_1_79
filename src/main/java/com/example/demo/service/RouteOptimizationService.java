@@ -1,13 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.RouteOptimizationResult;
+import java.util.List;
 
-// Service interface for Route Optimization
 public interface RouteOptimizationService {
 
-    // Generate optimized route for a shipment
-    RouteOptimizationResult optimizeRoute(Long shipmentId);
-
-    // Get optimization result by id
-    RouteOptimizationResult getResult(Long resultId);
+    List<String> optimizeRoute(Long shipmentId);
 }
