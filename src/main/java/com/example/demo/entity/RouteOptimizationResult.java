@@ -27,18 +27,7 @@ public class RouteOptimizationResult {
     private Double estimatedFuelUsageL;
     private LocalDateTime generatedAt;
 
-    public RouteOptimizationResult() {}
-
-    public RouteOptimizationResult(Long id, Shipment shipment,
-                                   Double optimizedDistanceKm,
-                                   Double estimatedFuelUsageL,
-                                   LocalDateTime generatedAt) {
-        this.id = id;
-        this.shipment = shipment;
-        this.optimizedDistanceKm = optimizedDistanceKm;
-        this.estimatedFuelUsageL = estimatedFuelUsageL;
-        this.generatedAt = generatedAt;
-    }
+   
 
     public Long getId() {
         return id;

@@ -32,17 +32,7 @@ public class Shipment {
     private Double weightKg;
     private LocalDate scheduledDate;
 
-    public Shipment() {}
-
-    public Shipment(Long id, Vehicle vehicle, Location pickupLocation,
-                    Location dropLocation, Double weightKg, LocalDate scheduledDate) {
-        this.id = id;
-        this.vehicle = vehicle;
-        this.pickupLocation = pickupLocation;
-        this.dropLocation = dropLocation;
-        this.weightKg = weightKg;
-        this.scheduledDate = scheduledDate;
-    }
+    
 
     public Long getId() {
         return id;

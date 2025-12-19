@@ -27,15 +27,7 @@ public class Vehicle {
     @ManyToOne
     private User user;
 
-    public Vehicle() {}
-
-    public Vehicle(Long id, String vehicleNumber, Double capacityKg, Double fuelEfficiency, User user) {
-        this.id = id;
-        this.vehicleNumber = vehicleNumber;
-        this.capacityKg = capacityKg;
-        this.fuelEfficiency = fuelEfficiency;
-        this.user = user;
-    }
+   
 
     public Long getId() {
         return id;
