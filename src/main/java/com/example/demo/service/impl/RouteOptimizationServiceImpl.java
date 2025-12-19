@@ -12,8 +12,9 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
     private final ShipmentRepository shipmentRepo;
     private final RouteOptimizationResultRepository resultRepo;
 
-    public RouteOptimizationServiceImpl(ShipmentRepository shipmentRepo,
-                                        RouteOptimizationResultRepository resultRepo) {
+    public RouteOptimizationServiceImpl(
+            ShipmentRepository shipmentRepo,
+            RouteOptimizationResultRepository resultRepo) {
         this.shipmentRepo = shipmentRepo;
         this.resultRepo = resultRepo;
     }
@@ -28,14 +29,14 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
                 s.getPickupLocation().getLongitude() - s.getDropLocation().getLongitude()
         );
 
-        RouteOptimizationResult r = RouteOptimizationResult.builder()
+        RouteOptimizationResult result = RouteOptimizationResult.builder()
                 .shipment(s)
                 .optimizedDistanceKm(distance)
                 .estimatedFuelUsageL(distance / s.getVehicle().getFuelEfficiency())
                 .generatedAt(LocalDateTime.now())
                 .build();
 
-        return resultRepo.save(r);
+        return resultRepo.save(result);
     }
 
     @Override
