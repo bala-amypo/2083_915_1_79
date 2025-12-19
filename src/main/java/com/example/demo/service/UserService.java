@@ -2,11 +2,15 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 
+// Service interface for User related operations
 public interface UserService {
 
-    // Register a new user (password hashing + default role)
+    // Register a new user
     User register(User user);
 
-    // Used during login & authentication
+    // Find user by email
     User findByEmail(String email);
+
+    // Find user by id
+    User findById(Long id);
 }

@@ -1,15 +1,13 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.Shipment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.example.demo.entity.Shipment;
-
-@Repository
+// Repository for Shipment entity
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
-    // Get all shipments for a vehicle
+    // Find shipments by vehicle id
     List<Shipment> findByVehicleId(Long vehicleId);
 }

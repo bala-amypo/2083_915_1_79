@@ -1,14 +1,18 @@
 package com.example.demo.service;
 
-import java.util.List;
-
 import com.example.demo.entity.Location;
 
+import java.util.List;
+
+// Service interface for Location operations
 public interface LocationService {
 
-    // Create a pickup/drop location
+    // Create a new location
     Location createLocation(Location location);
 
-    // Fetch all locations
+    // Get all locations
     List<Location> getAllLocations();
+
+    // Find location by id
+    Location findById(Long id);
 }
