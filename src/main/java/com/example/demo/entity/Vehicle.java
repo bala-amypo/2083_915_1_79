@@ -1,72 +1,73 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+// Represents a vehicle owned by a user
 @Entity
-@Table(
-    name = "vehicles",
-    uniqueConstraints = @UniqueConstraint(columnNames = "vehicleNumber")
-)
+@Table(name = "vehicles")
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @Column(nullable = false, unique = true)
     private String vehicleNumber;
-
-    @Column(nullable = false)
     private Double capacityKg;
-
-    @Column(nullable = false)
     private Double fuelEfficiency;
 
-    // -------- Constructors --------
+    // Many vehicles belong to one user
+    @ManyToOne
+    private User user;
+
     public Vehicle() {}
 
-    // -------- Getters & Setters --------
+    public Vehicle(Long id, String vehicleNumber, Double capacityKg, Double fuelEfficiency, User user) {
+        this.id = id;
+        this.vehicleNumber = vehicleNumber;
+        this.capacityKg = capacityKg;
+        this.fuelEfficiency = fuelEfficiency;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public String getVehicleNumber() {
+        return vehicleNumber;
+    }
+
+    public Double getCapacityKg() {
+        return capacityKg;
+    }
+
+    public Double getFuelEfficiency() {
+        return fuelEfficiency;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-    
-    public void setUser(User user) {
-        this.user = user;
-    }
-    
-    public String getVehicleNumber() {
-        return vehicleNumber;
-    }
-    
     public void setVehicleNumber(String vehicleNumber) {
         this.vehicleNumber = vehicleNumber;
     }
-    
-    public Double getCapacityKg() {
-        return capacityKg;
-    }
-    
+
     public void setCapacityKg(Double capacityKg) {
         this.capacityKg = capacityKg;
     }
-    
-    public Double getFuelEfficiency() {
-        return fuelEfficiency;
-    }
-    
+
     public void setFuelEfficiency(Double fuelEfficiency) {
         this.fuelEfficiency = fuelEfficiency;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

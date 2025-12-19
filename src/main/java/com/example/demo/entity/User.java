@@ -1,32 +1,47 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.List;
 
+// Represents a user in the system
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name; 
+
+    private String name;
     private String email;
     private String password;
-    private String role;
-    public User() {
+    private String role;   // USER or ADMIN
 
-    }
-    public User(String name, String email, String password, String role) {
+    // One user can have many vehicles
+    @OneToMany(mappedBy = "user")
+    private List<Vehicle> vehicles;
+
+    // Required no-arg constructor
+    public User() {}
+
+    public User(Long id, String name, String email, String password, String role) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
+
+    // Getters and setters (written manually for learning)
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -35,10 +50,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEmail() {
