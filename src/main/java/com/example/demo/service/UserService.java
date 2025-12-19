@@ -1,16 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.User;
+import java.util.List;
 
-// Service interface for User related operations
 public interface UserService {
 
-    // Register a new user
-    User register(User user);
+    User createUser(User user);
 
-    // Find user by email
-    User findByEmail(String email);
+    User getUserById(Long id);
 
-    // Find user by id
-    User findById(Long id);
+    List<User> getAllUsers();
 }

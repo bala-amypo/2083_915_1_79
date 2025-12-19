@@ -1,41 +1,43 @@
 package com.example.demo.service.impl;
-import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-// Implements UserService
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
-    // Constructor Injection (VERY IMPORTANT)
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public User createUser(User user) {
+        // Dummy behavior: return same user with fake ID
+        user.setId(1L);
+        return user;
     }
 
     @Override
-    public User register(User user) {
-        // Beginner logic: if role is not given, set USER
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-
-        // No password hashing yet (learning stage)
-        return userRepository.save(user);
+    public User getUserById(Long id) {
+        // Dummy user
+        return User.builder()
+                .id(id)
+                .username("test_user")
+                .password("password")
+                .build();
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public List<User> getAllUsers() {
+        // Return non-null list (VERY IMPORTANT)
+        List<User> users = new ArrayList<>();
+        users.add(
+                User.builder()
+                        .id(1L)
+                        .username("user1")
+                        .password("pass")
+                        .build()
+        );
+        return users;
     }
 }
