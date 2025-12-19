@@ -1,6 +1,8 @@
 package com.example.demo.controller;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController                                                                                                          
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/locations")                                                                                                        
 public class LocationController {
 }
