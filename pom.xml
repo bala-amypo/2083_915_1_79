@@ -72,6 +72,32 @@
         <version>0.11.5</version>
         <scope>runtime</scope>
     </dependency>
+	<!-- ================= TEST DEPENDENCIES ================= -->
+
+<!-- TestNG -->
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.10.2</version>
+    <scope>test</scope>
+</dependency>
+
+<!-- Mockito core -->
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <version>5.11.0</version>
+    <scope>test</scope>
+</dependency>
+
+<!-- Mockito TestNG support -->
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-testng</artifactId>
+    <version>0.5.0</version>
+    <scope>test</scope>
+</dependency>
+
 	<!-- Swagger / OpenAPI (REQUIRED because SwaggersConfig exists) -->
 <dependency>
     <groupId>org.springdoc</groupId>
