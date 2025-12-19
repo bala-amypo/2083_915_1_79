@@ -4,10 +4,6 @@ import com.example.demo.entity.Location;
 import java.util.List;
 
 public interface LocationService {
-
-    Location addLocation(Location location);
-
-    Location getLocationById(Long id);
-
+    Location createLocation(Location location);
     List<Location> getAllLocations();
 }

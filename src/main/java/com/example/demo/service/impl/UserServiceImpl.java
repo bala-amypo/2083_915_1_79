@@ -1,43 +1,36 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Service
 public class UserServiceImpl implements UserService {
 
-    @Override
-    public User createUser(User user) {
-        // Dummy behavior: return same user with fake ID
-        user.setId(1L);
-        return user;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
+
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
-    public User getUserById(Long id) {
-        // Dummy user
-        return User.builder()
-                .id(id)
-                .username("test_user")
-                .password("password")
-                .build();
+    public User register(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        if (user.getRole() == null) user.setRole("USER");
+        return repo.save(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        // Return non-null list (VERY IMPORTANT)
-        List<User> users = new ArrayList<>();
-        users.add(
-                User.builder()
-                        .id(1L)
-                        .username("user1")
-                        .password("pass")
-                        .build()
-        );
-        return users;
+    public User findByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    public User findById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

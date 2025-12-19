@@ -1,40 +1,42 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Vehicle;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.VehicleRepository;
 import com.example.demo.service.VehicleService;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class VehicleServiceImpl implements VehicleService {
 
-    @Override
-    public Vehicle addVehicle(Vehicle vehicle) {
-        vehicle.setId(1L);
-        return vehicle;
+    private final VehicleRepository repo;
+    private final UserRepository userRepo;
+
+    public VehicleServiceImpl(VehicleRepository repo, UserRepository userRepo) {
+        this.repo = repo;
+        this.userRepo = userRepo;
     }
 
     @Override
-    public Vehicle getVehicleById(Long id) {
-        return Vehicle.builder()
-                .id(id)
-                .vehicleNumber("TN01AB1234")
-                .type("Truck")
-                .build();
+    public Vehicle addVehicle(Long userId, Vehicle vehicle) {
+        if (vehicle.getCapacityKg() <= 0)
+            throw new IllegalArgumentException("Capacity must be positive");
+
+        vehicle.setUser(userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
+
+        return repo.save(vehicle);
     }
 
     @Override
-    public List<Vehicle> getAllVehicles() {
-        List<Vehicle> vehicles = new ArrayList<>();
-        vehicles.add(
-                Vehicle.builder()
-                        .id(1L)
-                        .vehicleNumber("TN01AB1234")
-                        .type("Truck")
-                        .build()
-        );
-        return vehicles;
+    public List<Vehicle> getVehiclesByUser(Long userId) {
+        return repo.findByUserId(userId);
+    }
+
+    @Override
+    public Vehicle findById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
     }
 }
