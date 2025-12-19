@@ -15,10 +15,10 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Location createLocation(Location location) {
-        if (location.getLatitude() < -90 || location.getLatitude() > 90)
+    public Location createLocation(Location l) {
+        if (l.getLatitude() < -90 || l.getLatitude() > 90)
             throw new IllegalArgumentException("Invalid latitude");
-        return repo.save(location);
+        return repo.save(l);
     }
 
     @Override
