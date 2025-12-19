@@ -1,17 +1,26 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Entity
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vehicle {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(unique = true)
     private String vehicleNumber;
+
     private Double capacityKg;
+
     private Double fuelEfficiency;
+
+    @ManyToOne
     private User user;
 }
