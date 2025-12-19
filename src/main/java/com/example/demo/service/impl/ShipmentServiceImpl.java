@@ -1,40 +1,48 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Shipment;
+import com.example.demo.entity.*;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.*;
 import com.example.demo.service.ShipmentService;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
-@Service
 public class ShipmentServiceImpl implements ShipmentService {
 
-    @Override
-    public Shipment createShipment(Shipment shipment) {
-        shipment.setId(1L);
-        return shipment;
+    private final ShipmentRepository repo;
+    private final VehicleRepository vehicleRepo;
+    private final LocationRepository locationRepo;
+
+    public ShipmentServiceImpl(ShipmentRepository repo, VehicleRepository vehicleRepo, LocationRepository locationRepo) {
+        this.repo = repo;
+        this.vehicleRepo = vehicleRepo;
+        this.locationRepo = locationRepo;
     }
 
     @Override
-    public Shipment getShipmentById(Long id) {
-        return Shipment.builder()
-                .id(id)
-                .description("Electronics")
-                .status("CREATED")
-                .build();
+    public Shipment createShipment(Long vehicleId, Shipment shipment) {
+
+        Vehicle vehicle = vehicleRepo.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+
+        if (shipment.getWeightKg() > vehicle.getCapacityKg())
+            throw new IllegalArgumentException("Weight exceeds capacity");
+
+        if (shipment.getScheduledDate().isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Scheduled date is in the past");
+
+        shipment.setVehicle(vehicle);
+        shipment.setPickupLocation(
+                locationRepo.findById(shipment.getPickupLocation().getId()).orElseThrow());
+        shipment.setDropLocation(
+                locationRepo.findById(shipment.getDropLocation().getId()).orElseThrow());
+
+        return repo.save(shipment);
     }
 
     @Override
-    public List<Shipment> getAllShipments() {
-        List<Shipment> shipments = new ArrayList<>();
-        shipments.add(
-                Shipment.builder()
-                        .id(1L)
-                        .description("Electronics")
-                        .status("CREATED")
-                        .build()
-        );
-        return shipments;
+    public Shipment getShipment(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
     }
 }
