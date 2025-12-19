@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.User;
-@Service
+
 // Service interface for User related operations
 public interface UserService {
 

@@ -8,7 +8,7 @@ import com.example.demo.repository.ShipmentRepository;
 import com.example.demo.service.RouteOptimizationService;
 
 import java.time.LocalDateTime;
-
+@Service
 // Implements RouteOptimizationService
 public class RouteOptimizationServiceImpl implements RouteOptimizationService {
 

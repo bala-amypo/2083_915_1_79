@@ -10,7 +10,7 @@ import com.example.demo.repository.VehicleRepository;
 import com.example.demo.service.ShipmentService;
 
 import java.time.LocalDate;
-
+@Service
 // Implements ShipmentService
 public class ShipmentServiceImpl implements ShipmentService {
 

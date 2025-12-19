@@ -6,7 +6,7 @@ import com.example.demo.repository.LocationRepository;
 import com.example.demo.service.LocationService;
 
 import java.util.List;
-
+@Service
 // Implements LocationService
 public class LocationServiceImpl implements LocationService {
 

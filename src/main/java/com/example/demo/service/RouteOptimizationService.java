@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.RouteOptimizationResult;
-@Service
+
 // Service interface for Route Optimization
 public interface RouteOptimizationService {
 
