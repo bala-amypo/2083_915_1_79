@@ -14,7 +14,7 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     public VehicleController(VehicleService vehicleService) {
-        this.vehicleServices = vehicleService;
+        this.vehicleService = vehicleService;
     }
 
     // Add a vehicle for a user
@@ -25,10 +25,10 @@ public class VehicleController {
     }
 
     // Get all vehicles of a user
-    @GetMapping("/user/{userId}")
-    public List<Vehicle> getVehiclesByUser(@PathVariable Long userId) {
-        return vehicleService.getVehiclesByUser(userId);
-    }
+    //@GetMapping("/user/{userId}")
+    //public List<Vehicle> getVehiclesByUser(@PathVariable Long userId) {
+    //    return vehicleService.getVehiclesByUser(userId);
+    //}
 
     // Get vehicle by id
     @GetMapping("/{id}")
