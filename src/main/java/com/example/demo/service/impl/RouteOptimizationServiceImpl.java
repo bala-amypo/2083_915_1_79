@@ -23,6 +23,7 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
 
     @Override
     public RouteOptimizationResult optimizeRoute(Long shipmentId) {
+        /*
         Shipment s = shipmentRepo.findById(shipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
 
@@ -39,6 +40,8 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
                 .build();
 
         return resultRepo.save(result);
+        */
+        
 
     return null; 
 
