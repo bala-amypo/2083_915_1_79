@@ -24,7 +24,7 @@ public class LocationServiceImpl implements LocationService {
         return repo.save(l);
     }
 
-    //@Override
+    @Override
     public List<Location> getAllLocations() {
         return repo.findAll();
     }
