@@ -24,7 +24,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public Shipment createShipment(Long vehicleId, Shipment s) {
         Vehicle v = vehicleRepo.findById(vehicleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+                .orElseThrow(() -> new GlobalExceptionHandler("Vehicle not found"));
 
         if (s.getWeightKg() > v.getCapacityKg())
     throw new RuntimeException("Weight exceeds capacity");
