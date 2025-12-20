@@ -6,13 +6,14 @@ import io.jsonwebtoken.Jws;
 public class JwtUtil {
 
     public JwtUtil(String secret, long expirationMs) {
+        
     }
 
     public String generateToken(Long userId, String email, String role) {
-        return null;
+        return "DUMMY_TOKEN";
     }
 
     public Jws<Claims> validateToken(String token) {
-        throw new RuntimeException("Invalid token");
+        throw new RuntimeException("Invalid token (dummy implementation)");
     }
 }
