@@ -13,6 +13,6 @@ public class JwtUtil {
     }
 
     public Jws<Claims> validateToken(String token) {
-        throw new IllegalArgumentException("Invalid token");
+        throw new RuntimeException("Invalid token");
     }
 }
