@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Vehicle;
 import com.example.demo.service.VehicleService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotations.*;
 
 import java.util.List;
 
@@ -25,10 +25,10 @@ public class VehicleController {
     }
 
     // Get all vehicles of a user
-    //@GetMapping("/user/{userId}")
-    //public List<Vehicle> getVehiclesByUser(@PathVariable Long userId) {
-    //    return vehicleService.getVehiclesByUser(userId);
-    //}
+    @GetMapping("/user/{userId}")
+    public List<Vehicle> getVehiclesByUser(@PathVariable Long userId) {
+        return vehicleService.getVehiclesByUser(userId);
+    }
 
     // Get vehicle by id
     @GetMapping("/{id}")
