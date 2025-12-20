@@ -14,7 +14,7 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     public VehicleController(VehicleService vehicleService) {
-        this.vehicleService = vehicleService;
+        this.vehicleServices = vehicleService;
     }
 
     // Add a vehicle for a user
