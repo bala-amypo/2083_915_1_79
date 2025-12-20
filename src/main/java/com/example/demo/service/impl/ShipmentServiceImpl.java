@@ -31,7 +31,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 
 
         if (s.getScheduledDate().isBefore(LocalDate.now()))
-            throw new IllegalArgumentException("Scheduled date in past");
+            throw new RuntimeException("Scheduled date in past");
 
         s.setVehicle(v);
         s.setPickupLocation(locationRepo.findById(s.getPickupLocation().getId()).orElseThrow());
