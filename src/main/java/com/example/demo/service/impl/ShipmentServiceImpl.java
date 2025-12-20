@@ -23,12 +23,21 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public Shipment createShipment(Long vehicleId, Shipment s) {
+        Vehicle v = vehicleRepo.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+
+        if (s.getWeightKg() > v.getCapacityKg())
+    throw new RuntimeException("Weight exceeds capacity");
+
+
         if (s.getScheduledDate().isBefore(LocalDate.now()))
-    throw new IllegalArgumentException("Scheduled date in past");
+            throw new IllegalArgumentException("Scheduled date in past");
 
-if (s.getWeightKg() > v.getCapacityKg())
-    throw new IllegalArgumentException("Weight exceeds capacity");
+        s.setVehicle(v);
+        s.setPickupLocation(locationRepo.findById(s.getPickupLocation().getId()).orElseThrow());
+        s.setDropLocation(locationRepo.findById(s.getDropLocation().getId()).orElseThrow());
 
+        return repo.save(s);
     }
 
     @Override
