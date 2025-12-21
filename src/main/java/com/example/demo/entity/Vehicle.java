@@ -12,8 +12,9 @@ import lombok.*;
 public class Vehicle {
 
     @Id
-    @GeneratedValue
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     @Column(unique = true)
     private String vehicleNumber;
