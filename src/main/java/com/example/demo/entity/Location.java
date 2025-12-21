@@ -11,9 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 public class Location {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+   @Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     private String name;
 

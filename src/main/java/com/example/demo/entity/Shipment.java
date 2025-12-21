@@ -14,8 +14,9 @@ import java.time.LocalDate;
 public class Shipment {
 
     @Id
-    @GeneratedValue
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     @ManyToOne
     private Vehicle vehicle;

@@ -12,8 +12,9 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     private String name;
 

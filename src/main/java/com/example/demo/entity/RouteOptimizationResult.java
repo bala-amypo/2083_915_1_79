@@ -14,8 +14,9 @@ import java.time.LocalDateTime;
 public class RouteOptimizationResult {
 
     @Id
-    @GeneratedValue
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     @ManyToOne
     private Shipment shipment;
