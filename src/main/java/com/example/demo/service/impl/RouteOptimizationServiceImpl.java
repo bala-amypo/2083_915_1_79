@@ -43,7 +43,7 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
         */
         
 
-    return resultRepo.save(result);; 
+    return resultRepo.save(result); 
 
 
     }
