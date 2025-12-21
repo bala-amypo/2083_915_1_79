@@ -3,9 +3,9 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Location;
 import com.example.demo.repository.LocationRepository;
 import com.example.demo.service.LocationService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -20,16 +20,14 @@ public class LocationServiceImpl implements LocationService {
     public Location createLocation(Location l) {
 
         if (l.getLatitude() < -90 || l.getLatitude() > 90) {
-            throw new RuntimeException("Invalid latitude");
+            throw new IllegalArgumentException("Invalid latitude");
         }
+
         return repo.save(l);
-        
-        
     }
-    
+
     @Override
     public List<Location> getAllLocations() {
         return repo.findAll();
     }
-    
 }

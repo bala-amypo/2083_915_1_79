@@ -20,10 +20,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        /*user.setPassword(encoder.encode(user.getPassword()));
+        user.setPassword(encoder.encode(user.getPassword()));
+
         if (user.getRole() == null) {
             user.setRole("USER");
-        }*/
+        }
+
         return repo.save(user);
     }
 
@@ -33,7 +35,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    // ❗ NO @Override — interface does not declare it
     public User findById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));

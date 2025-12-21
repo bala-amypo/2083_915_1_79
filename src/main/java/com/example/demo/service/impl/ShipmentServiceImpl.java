@@ -4,9 +4,9 @@ import com.example.demo.entity.*;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
 import com.example.demo.service.ShipmentService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
@@ -15,7 +15,11 @@ public class ShipmentServiceImpl implements ShipmentService {
     private final VehicleRepository vehicleRepo;
     private final LocationRepository locationRepo;
 
-    public ShipmentServiceImpl(ShipmentRepository repo, VehicleRepository vehicleRepo, LocationRepository locationRepo) {
+    public ShipmentServiceImpl(
+            ShipmentRepository repo,
+            VehicleRepository vehicleRepo,
+            LocationRepository locationRepo
+    ) {
         this.repo = repo;
         this.vehicleRepo = vehicleRepo;
         this.locationRepo = locationRepo;
@@ -23,19 +27,25 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public Shipment createShipment(Long vehicleId, Shipment s) {
+
         Vehicle v = vehicleRepo.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
 
-        if (s.getWeightKg() > v.getCapacityKg())
-    throw new RuntimeException("Weight exceeds capacity");
+        if (s.getWeightKg() > v.getCapacityKg()) {
+            throw new IllegalArgumentException("Weight exceeds capacity");
+        }
 
-
-        if (s.getScheduledDate().isBefore(LocalDate.now()))
-            throw new RuntimeException("Scheduled date in past");
+        if (s.getScheduledDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Scheduled date in past");
+        }
 
         s.setVehicle(v);
-        s.setPickupLocation(locationRepo.findById(s.getPickupLocation().getId()).orElseThrow());
-        s.setDropLocation(locationRepo.findById(s.getDropLocation().getId()).orElseThrow());
+        s.setPickupLocation(
+                locationRepo.findById(s.getPickupLocation().getId()).orElseThrow()
+        );
+        s.setDropLocation(
+                locationRepo.findById(s.getDropLocation().getId()).orElseThrow()
+        );
 
         return repo.save(s);
     }
