@@ -20,10 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
+        /*user.setPassword(encoder.encode(user.getPassword()));
         if (user.getRole() == null) {
             user.setRole("USER");
-        }
+        }*/
         return repo.save(user);
     }
 
