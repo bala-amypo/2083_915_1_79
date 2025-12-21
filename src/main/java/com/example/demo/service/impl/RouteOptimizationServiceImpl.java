@@ -18,8 +18,7 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
 
     public RouteOptimizationServiceImpl(
             ShipmentRepository shipmentRepo,
-            RouteOptimizationResultRepository resultRepo
-    ) {
+            RouteOptimizationResultRepository resultRepo) {
         this.shipmentRepo = shipmentRepo;
         this.resultRepo = resultRepo;
     }
@@ -29,6 +28,16 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
 
         Shipment s = shipmentRepo.findById(shipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
+
+        // ✅ Defensive checks (tests EXPECT this)
+        if (s.getPickupLocation() == null || s.getDropLocation() == null) {
+            throw new IllegalArgumentException("Locations must be provided");
+        }
+
+        if (s.getVehicle() == null || s.getVehicle().getFuelEfficiency() == null
+                || s.getVehicle().getFuelEfficiency() <= 0) {
+            throw new IllegalArgumentException("Invalid vehicle fuel efficiency");
+        }
 
         double distance = Math.hypot(
                 s.getPickupLocation().getLatitude() - s.getDropLocation().getLatitude(),
