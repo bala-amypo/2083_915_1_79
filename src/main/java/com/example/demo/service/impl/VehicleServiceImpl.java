@@ -21,7 +21,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    @Override
+    
 public Vehicle addVehicle(Long userId, Vehicle vehicle) {
 
     if (vehicle.getCapacityKg() == null || vehicle.getCapacityKg() <= 0) {
