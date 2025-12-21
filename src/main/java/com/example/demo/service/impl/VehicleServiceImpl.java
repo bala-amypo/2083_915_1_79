@@ -25,11 +25,12 @@ public class VehicleServiceImpl implements VehicleService {
 
         if (vehicle.getCapacityKg() <= 0)
             throw new IllegalArgumentException("Capacity must be positive");
-
+        /*
         vehicle.setUser(
                 userRepo.findById(userId)
                         .orElseThrow(() -> new ResourceNotFoundException("User not found"))
         );
+        */
 
         return repo.save(vehicle);
     }
