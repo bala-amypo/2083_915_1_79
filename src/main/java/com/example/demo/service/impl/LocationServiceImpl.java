@@ -26,10 +26,10 @@ public class LocationServiceImpl implements LocationService {
         
         
     }
-    /*
+    
     @Override
     public List<Location> getAllLocations() {
         return repo.findAll();
     }
-    */
+    
 }
