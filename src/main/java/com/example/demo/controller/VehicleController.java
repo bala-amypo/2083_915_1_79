@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// Handles vehicle-related APIs
 @RestController
 @RequestMapping("/vehicles")
 public class VehicleController {
