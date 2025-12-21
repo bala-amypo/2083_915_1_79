@@ -7,7 +7,7 @@ import com.example.demo.service.LocationService;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository repo;
