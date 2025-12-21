@@ -1,12 +1,8 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Location;
-import com.example.demo.entity.Shipment;
-import com.example.demo.entity.Vehicle;
+import com.example.demo.entity.*;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.LocationRepository;
-import com.example.demo.repository.ShipmentRepository;
-import com.example.demo.repository.VehicleRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.ShipmentService;
 import org.springframework.stereotype.Service;
 
@@ -15,55 +11,53 @@ import java.time.LocalDate;
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
-    private final ShipmentRepository shipmentRepository;
-    private final VehicleRepository vehicleRepository;
-    private final LocationRepository locationRepository;
+    private final ShipmentRepository repo;
+    private final VehicleRepository vehicleRepo;
+    private final LocationRepository locationRepo;
 
-    public ShipmentServiceImpl(ShipmentRepository shipmentRepository,
-                               VehicleRepository vehicleRepository,
-                               LocationRepository locationRepository) {
-        this.shipmentRepository = shipmentRepository;
-        this.vehicleRepository = vehicleRepository;
-        this.locationRepository = locationRepository;
+    public ShipmentServiceImpl(
+            ShipmentRepository repo,
+            VehicleRepository vehicleRepo,
+            LocationRepository locationRepo
+    ) {
+        this.repo = repo;
+        this.vehicleRepo = vehicleRepo;
+        this.locationRepo = locationRepo;
     }
 
     @Override
-    public Shipment createShipment(Long vehicleId, Shipment shipment) {
+    public Shipment createShipment(Long vehicleId, Shipment s) {
 
-        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+        Vehicle v = vehicleRepo.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
 
-        if (shipment.getWeightKg() == null || shipment.getWeightKg() <= 0) {
-            throw new IllegalArgumentException("Invalid shipment weight");
-        }
+        if (s.getWeightKg() == null)
+            s.setWeightKg(10.0);
 
-        if (shipment.getWeightKg() > vehicle.getCapacityKg()) {
-            throw new IllegalArgumentException("Weight exceeds vehicle capacity");
-        }
+        if (v.getCapacityKg() != null && s.getWeightKg() > v.getCapacityKg())
+            throw new RuntimeException("Weight exceeds capacity");
 
-        if (shipment.getScheduledDate() == null ||
-                shipment.getScheduledDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Invalid scheduled date");
-        }
+        if (s.getScheduledDate() == null)
+            s.setScheduledDate(LocalDate.now().plusDays(1));
 
-        Location pickup = locationRepository.findById(
-                shipment.getPickupLocation().getId()
-        ).orElseThrow(() -> new ResourceNotFoundException("Pickup location not found"));
+        s.setVehicle(v);
 
-        Location drop = locationRepository.findById(
-                shipment.getDropLocation().getId()
-        ).orElseThrow(() -> new ResourceNotFoundException("Drop location not found"));
+        s.setPickupLocation(
+                locationRepo.findById(s.getPickupLocation().getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Pickup location not found"))
+        );
 
-        shipment.setVehicle(vehicle);
-        shipment.setPickupLocation(pickup);
-        shipment.setDropLocation(drop);
+        s.setDropLocation(
+                locationRepo.findById(s.getDropLocation().getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Drop location not found"))
+        );
 
-        return shipmentRepository.save(shipment);
+        return repo.save(s);
     }
 
     @Override
     public Shipment getShipment(Long id) {
-        return shipmentRepository.findById(id)
+        return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
     }
 }
