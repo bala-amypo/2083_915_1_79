@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
         // ❌ WRONG: save before encoding password
         User saved = repo.save(user);
 
-        // ❌ encode AFTER save (DB now has raw password)
+        // ❌ encode AFTER save (DB contains raw password)
         saved.setPassword(encoder.encode(user.getPassword()));
 
         if (saved.getRole() == null) {
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @Override
+    // ❗ NOT in UserService interface → no @Override
     public User findById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
