@@ -15,7 +15,7 @@ public class Vehicle {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true)
+    // ❌ uniqueness constraint removed
     private String vehicleNumber;
 
     private Double capacityKg;

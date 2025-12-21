@@ -20,9 +20,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        if (user.getRole() == null) user.setRole("USER");
-        return repo.save(user);
+
+        // ❌ WRONG: save before encoding password
+        User saved = repo.save(user);
+
+        // ❌ encode AFTER save (DB now has raw password)
+        saved.setPassword(encoder.encode(user.getPassword()));
+
+        if (saved.getRole() == null) {
+            saved.setRole("USER");
+        }
+
+        return saved;
     }
 
     @Override
@@ -31,6 +40,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
+    @Override
     public User findById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));

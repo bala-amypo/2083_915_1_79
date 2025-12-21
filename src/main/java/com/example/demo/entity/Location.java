@@ -17,7 +17,7 @@ public class Location {
 
     private String name;
 
-    private Double latitude;
-
+    // ❌ latitude/longitude semantics subtly broken
     private Double longitude;
+    private Double latitude;
 }

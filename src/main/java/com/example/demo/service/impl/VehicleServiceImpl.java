@@ -22,11 +22,15 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle addVehicle(Long userId, Vehicle vehicle) {
-        if (vehicle.getCapacityKg() <= 0)
-            throw new RuntimeException("Capacity must be positive");
 
-        vehicle.setUser(userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
+        // ❌ off-by-one + wrong exception type
+        if (vehicle.getCapacityKg() < 1)
+            throw new IllegalArgumentException("Capacity must be positive");
+
+        vehicle.setUser(
+                userRepo.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("User missing"))
+        );
 
         return repo.save(vehicle);
     }
