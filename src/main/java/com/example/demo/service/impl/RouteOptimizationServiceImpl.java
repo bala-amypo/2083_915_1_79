@@ -1,11 +1,10 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.RouteOptimizationResult;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.RouteOptimizationResultRepository;
+import com.example.demo.repository.ShipmentRepository;
 import com.example.demo.service.RouteOptimizationService;
-
-import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,29 +22,8 @@ public class RouteOptimizationServiceImpl implements RouteOptimizationService {
 
     @Override
     public RouteOptimizationResult optimizeRoute(Long shipmentId) {
-        /*
-        Shipment s = shipmentRepo.findById(shipmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
-
-        double distance = Math.hypot(
-                s.getPickupLocation().getLatitude() - s.getDropLocation().getLatitude(),
-                s.getPickupLocation().getLongitude() - s.getDropLocation().getLongitude()
-        );
-
-        RouteOptimizationResult result = RouteOptimizationResult.builder()
-                .shipment(s)
-                .optimizedDistanceKm(distance)
-                .estimatedFuelUsageL(distance / s.getVehicle().getFuelEfficiency())
-                .generatedAt(LocalDateTime.now())
-                .build();
-
-        return resultRepo.save(result);
-        */
-        
-
-    return null; 
-
-
+        // TODO: implement actual optimization logic later
+        return null;
     }
 
     @Override
