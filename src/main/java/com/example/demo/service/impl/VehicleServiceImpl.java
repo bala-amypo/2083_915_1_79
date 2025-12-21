@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.User;
 import com.example.demo.entity.Vehicle;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
@@ -12,42 +13,41 @@ import java.util.List;
 @Service
 public class VehicleServiceImpl implements VehicleService {
 
-    private final VehicleRepository repo;
-    private final UserRepository userRepo;
+    private final VehicleRepository vehicleRepository;
+    private final UserRepository userRepository;
 
-    public VehicleServiceImpl(VehicleRepository repo, UserRepository userRepo) {
-        this.repo = repo;
-        this.userRepo = userRepo;
+    public VehicleServiceImpl(VehicleRepository vehicleRepository,
+                              UserRepository userRepository) {
+        this.vehicleRepository = vehicleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    
-public Vehicle addVehicle(Long userId, Vehicle vehicle) {
+    public Vehicle addVehicle(Long userId, Vehicle vehicle) {
 
-    if (vehicle.getCapacityKg() == null || vehicle.getCapacityKg() <= 0) {
-        throw new IllegalArgumentException("Capacity must be positive");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (vehicle.getCapacityKg() == null || vehicle.getCapacityKg() <= 0) {
+            throw new IllegalArgumentException("Capacity must be greater than zero");
+        }
+
+        if (vehicle.getFuelEfficiency() == null || vehicle.getFuelEfficiency() <= 0) {
+            throw new IllegalArgumentException("Fuel efficiency must be greater than zero");
+        }
+
+        vehicle.setUser(user);
+        return vehicleRepository.save(vehicle);
     }
-
-    if (vehicle.getFuelEfficiency() == null || vehicle.getFuelEfficiency() <= 0) {
-        throw new IllegalArgumentException("Fuel efficiency must be positive");
-    }
-
-    vehicle.setUser(
-            userRepo.findById(userId)
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found"))
-    );
-
-    return repo.save(vehicle);
-}
 
     @Override
     public List<Vehicle> getVehiclesByUser(Long userId) {
-        return repo.findByUserId(userId);
+        return vehicleRepository.findByUserId(userId);
     }
 
     @Override
     public Vehicle findById(Long id) {
-        return repo.findById(id)
+        return vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
     }
 }

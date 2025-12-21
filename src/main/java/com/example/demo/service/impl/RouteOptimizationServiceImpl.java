@@ -13,50 +13,49 @@ import java.time.LocalDateTime;
 @Service
 public class RouteOptimizationServiceImpl implements RouteOptimizationService {
 
-    private final ShipmentRepository shipmentRepo;
-    private final RouteOptimizationResultRepository resultRepo;
+    private final ShipmentRepository shipmentRepository;
+    private final RouteOptimizationResultRepository resultRepository;
 
-    public RouteOptimizationServiceImpl(
-            ShipmentRepository shipmentRepo,
-            RouteOptimizationResultRepository resultRepo) {
-        this.shipmentRepo = shipmentRepo;
-        this.resultRepo = resultRepo;
+    public RouteOptimizationServiceImpl(ShipmentRepository shipmentRepository,
+                                        RouteOptimizationResultRepository resultRepository) {
+        this.shipmentRepository = shipmentRepository;
+        this.resultRepository = resultRepository;
     }
 
     @Override
     public RouteOptimizationResult optimizeRoute(Long shipmentId) {
 
-        Shipment s = shipmentRepo.findById(shipmentId)
+        Shipment shipment = shipmentRepository.findById(shipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
 
-        // ✅ Defensive checks (tests EXPECT this)
-        if (s.getPickupLocation() == null || s.getDropLocation() == null) {
-            throw new IllegalArgumentException("Locations must be provided");
-        }
-
-        if (s.getVehicle() == null || s.getVehicle().getFuelEfficiency() == null
-                || s.getVehicle().getFuelEfficiency() <= 0) {
-            throw new IllegalArgumentException("Invalid vehicle fuel efficiency");
+        if (shipment.getVehicle() == null ||
+                shipment.getVehicle().getFuelEfficiency() == null ||
+                shipment.getVehicle().getFuelEfficiency() <= 0) {
+            throw new IllegalArgumentException("Invalid vehicle data");
         }
 
         double distance = Math.hypot(
-                s.getPickupLocation().getLatitude() - s.getDropLocation().getLatitude(),
-                s.getPickupLocation().getLongitude() - s.getDropLocation().getLongitude()
+                shipment.getPickupLocation().getLatitude() -
+                        shipment.getDropLocation().getLatitude(),
+                shipment.getPickupLocation().getLongitude() -
+                        shipment.getDropLocation().getLongitude()
         );
 
         RouteOptimizationResult result = RouteOptimizationResult.builder()
-                .shipment(s)
+                .shipment(shipment)
                 .optimizedDistanceKm(distance)
-                .estimatedFuelUsageL(distance / s.getVehicle().getFuelEfficiency())
+                .estimatedFuelUsageL(
+                        distance / shipment.getVehicle().getFuelEfficiency()
+                )
                 .generatedAt(LocalDateTime.now())
                 .build();
 
-        return resultRepo.save(result);
+        return resultRepository.save(result);
     }
 
     @Override
     public RouteOptimizationResult getResult(Long id) {
-        return resultRepo.findById(id)
+        return resultRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Result not found"));
     }
 }

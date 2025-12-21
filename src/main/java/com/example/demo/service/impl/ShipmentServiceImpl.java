@@ -1,58 +1,53 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.User;
+import com.example.demo.entity.Vehicle;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
-import com.example.demo.service.ShipmentService;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.VehicleRepository;
+import com.example.demo.service.VehicleService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Service
-public class ShipmentServiceImpl implements ShipmentService {
+public class VehicleServiceImpl implements VehicleService {
 
-    private final ShipmentRepository repo;
-    private final VehicleRepository vehicleRepo;
-    private final LocationRepository locationRepo;
+    private final VehicleRepository vehicleRepository;
+    private final UserRepository userRepository;
 
-    public ShipmentServiceImpl(
-            ShipmentRepository repo,
-            VehicleRepository vehicleRepo,
-            LocationRepository locationRepo
-    ) {
-        this.repo = repo;
-        this.vehicleRepo = vehicleRepo;
-        this.locationRepo = locationRepo;
+    public VehicleServiceImpl(VehicleRepository vehicleRepository,
+                              UserRepository userRepository) {
+        this.vehicleRepository = vehicleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public Shipment createShipment(Long vehicleId, Shipment s) {
+    public Vehicle addVehicle(Long userId, Vehicle vehicle) {
 
-        Vehicle v = vehicleRepo.findById(vehicleId)
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (vehicle.getCapacityKg() == null || vehicle.getCapacityKg() <= 0) {
+            throw new IllegalArgumentException("Capacity must be greater than zero");
+        }
+
+        if (vehicle.getFuelEfficiency() == null || vehicle.getFuelEfficiency() <= 0) {
+            throw new IllegalArgumentException("Fuel efficiency must be greater than zero");
+        }
+
+        vehicle.setUser(user);
+        return vehicleRepository.save(vehicle);
+    }
+
+    @Override
+    public List<Vehicle> getVehiclesByUser(Long userId) {
+        return vehicleRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Vehicle findById(Long id) {
+        return vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
-
-        if (s.getWeightKg() > v.getCapacityKg()) {
-            throw new IllegalArgumentException("Weight exceeds capacity");
-        }
-
-        if (s.getScheduledDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Scheduled date in past");
-        }
-
-        s.setVehicle(v);
-        s.setPickupLocation(
-                locationRepo.findById(s.getPickupLocation().getId()).orElseThrow()
-        );
-        s.setDropLocation(
-                locationRepo.findById(s.getDropLocation().getId()).orElseThrow()
-        );
-
-        return repo.save(s);
-    }
-
-    @Override
-    public Shipment getShipment(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found"));
     }
 }
