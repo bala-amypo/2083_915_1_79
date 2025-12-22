@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        // NO password encoding for now
         if (user.getRole() == null) {
             user.setRole("USER");
         }
