@@ -16,13 +16,11 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    // Create a new location
     @PostMapping
     public Location createLocation(@RequestBody Location location) {
         return locationService.createLocation(location);
     }
 
-    // Get all locations
     @GetMapping
     public List<Location> getAllLocations() {
         return locationService.getAllLocations();
