@@ -15,7 +15,6 @@
     <name>demo</name>
     <description>Transport Route Optimization</description>
 
-    <!-- ✅ Spring Boot 4 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -23,49 +22,43 @@
         <relativePath/>
     </parent>
 
-    <!-- ✅ Java 21 -->
     <properties>
         <java.version>21</java.version>
     </properties>
 
     <dependencies>
 
-        <!-- ================= CORE SPRING ================= -->
-
-        <!-- Core Spring Boot -->
+        <!-- Spring core -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- REQUIRED for @RestController, @GetMapping, ResponseEntity -->
+        <!-- Spring Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- JPA annotations (no real DB used, but entities need this) -->
+        <!-- JPA annotations -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- ================= SECURITY / PASSWORD ================= -->
-
-        <!-- PasswordEncoder interface -->
+        <!-- Password encoder -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
 
-        <!-- 🔥 REQUIRED for BCryptPasswordEncoder used in tests -->
+        <!-- Required for BCryptPasswordEncoder -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
 
-        <!-- ================= JWT ================= -->
-
+        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -86,24 +79,19 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ================= LOMBOK ================= -->
-
-        <!-- 🔥 MANDATORY (tests expect getters, setters, builders) -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!-- ================= TESTING ================= -->
-
-        <!-- Spring Boot test support (TestNG works fine with this) -->
+        <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
-                <!-- JUnit not required -->
                 <exclusion>
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
@@ -111,14 +99,12 @@
             </exclusions>
         </dependency>
 
-        <!-- TestNG (hidden tests use it) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -130,7 +116,6 @@
     <build>
         <plugins>
 
-            <!-- Java 21 compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -140,7 +125,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
