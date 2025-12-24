@@ -24,7 +24,7 @@ public class JwtUtil {
         Date expiry = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(email) // subject = email
                 .claim("userId", userId)
                 .claim("role", role)
                 .setIssuedAt(now)
@@ -38,5 +38,18 @@ public class JwtUtil {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
+    }
+
+    // ✅ New helper methods for tests
+    public String extractEmail(String token) {
+        return validateToken(token).getBody().getSubject();
+    }
+
+    public Long extractUserId(String token) {
+        return validateToken(token).getBody().get("userId", Long.class);
+    }
+
+    public String extractRole(String token) {
+        return validateToken(token).getBody().get("role", String.class);
     }
 }
