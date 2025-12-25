@@ -1,59 +1,37 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
 
-    // REQUIRED by evaluator (no-arg constructor)
-    public UserServiceImpl() {
-    }
-
-    // REQUIRED by Spring
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
     public User register(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
-        if (passwordEncoder != null && user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-
-        if (user.getRole() == null || user.getRole().isBlank()) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        if (user.getRole() == null) {
             user.setRole("USER");
         }
-
-        return userRepository.save(user);
+        return repo.save(user);
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found")
-                );
+    public User login(String email, String password) {
+        User user = repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+        return user;
     }
 
-    // REQUIRED by hidden tests (DO NOT REMOVE)
-    public User findById(long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found")
-                );
+    @Override
+    public User findById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
