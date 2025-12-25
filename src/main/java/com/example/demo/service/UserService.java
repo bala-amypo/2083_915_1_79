@@ -9,4 +9,7 @@ public interface UserService {
     User login(String email, String password);
 
     User findById(Long id);
+
+    // ✅ ADD THIS
+    User findByEmail(String email);
 }

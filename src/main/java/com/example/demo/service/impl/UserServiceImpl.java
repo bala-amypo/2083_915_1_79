@@ -42,4 +42,10 @@ public class UserServiceImpl implements UserService {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+    @Override
+public User findByEmail(String email) {
+    return repo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+}
+
 }
