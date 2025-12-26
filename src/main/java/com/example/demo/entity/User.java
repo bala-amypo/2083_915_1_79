@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "users") // ✅ FIX: avoid reserved keyword
 @Getter
 @Setter
 @Builder
@@ -12,13 +13,12 @@ import lombok.*;
 public class User {
 
     @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String password;
