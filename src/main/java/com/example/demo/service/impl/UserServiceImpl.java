@@ -11,9 +11,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repo;
-    private final PasswordEncoder passwordEncoder;  // ✅ Injected bean
+    private final PasswordEncoder passwordEncoder;
 
-    // ✅ Constructor injection ensures Spring provides the PasswordEncoder bean
     public UserServiceImpl(UserRepository repo, PasswordEncoder passwordEncoder) {
         this.repo = repo;
         this.passwordEncoder = passwordEncoder;
@@ -21,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        // ✅ Encode password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repo.save(user);
     }
@@ -29,6 +27,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return repo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    // ✅ Add this method so tests compile
+    @Override
+    public User findById(Long id) {
+        return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
