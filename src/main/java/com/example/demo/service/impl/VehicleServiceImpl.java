@@ -22,23 +22,20 @@ public class VehicleServiceImpl implements VehicleService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public Vehicle addVehicle(Long userId, Vehicle vehicle) {
+   @Override
+public Vehicle addVehicle(Long userId, Vehicle vehicle) {
 
-        if (vehicle.getCapacityKg() <= 0) {
-            throw new IllegalArgumentException("Vehicle capacity must be positive");
-        }
-
-        if (vehicle.getFuelEfficiency() <= 0) {
-            throw new IllegalArgumentException("Fuel efficiency must be positive");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        vehicle.setUser(user);
-        return vehicleRepository.save(vehicle);
+    if (vehicle.getCapacityKg() <= 0) {
+        throw new IllegalArgumentException("Vehicle capacity must be positive");
     }
+
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    vehicle.setUser(user);
+    return vehicleRepository.save(vehicle);
+}
+
 
     @Override
     public List<Vehicle> getVehiclesByUser(Long userId) {
