@@ -18,7 +18,9 @@ public class Shipment {
     private Long id;
 
     private double weightKg;
-    private LocalDate scheduledDate;
+
+    // 🔥 REQUIRED BY TESTS
+    private LocalDate shipmentDate;
 
     @ManyToOne
     private Vehicle vehicle;
