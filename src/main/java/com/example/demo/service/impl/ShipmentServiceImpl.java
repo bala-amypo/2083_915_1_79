@@ -28,10 +28,14 @@ public class ShipmentServiceImpl implements ShipmentService {
 
         Vehicle vehicle = vehicleRepo.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
-       if (shipment.getShipmentDate() == null ||
-    shipment.getShipmentDate().isBefore(LocalDate.now())) {
-    throw new IllegalArgumentException("Invalid shipment date");
+       if (shipment.getScheduledDate() == null) {
+    throw new IllegalArgumentException("Scheduled date cannot be null");
 }
+
+if (shipment.getScheduledDate().isBefore(LocalDate.now())) {
+    throw new IllegalArgumentException("Scheduled date cannot be in the past");
+}
+
 
 
         // ✅ weight must be positive

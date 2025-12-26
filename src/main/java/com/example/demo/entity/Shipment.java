@@ -17,10 +17,10 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double weightKg;
+    private double weight;
 
-    // 🔥 REQUIRED BY TESTS
-    private LocalDate shipmentDate;
+    // ✅ THIS IS WHAT TESTS EXPECT
+    private LocalDate scheduledDate;
 
     @ManyToOne
     private Vehicle vehicle;
