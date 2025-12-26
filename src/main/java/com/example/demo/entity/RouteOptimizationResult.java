@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteOptimizationResult {
@@ -16,11 +17,11 @@ public class RouteOptimizationResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Shipment shipment;
-
     private double optimizedDistanceKm;
     private double estimatedFuelUsageL;
 
     private LocalDateTime generatedAt;
+
+    @OneToOne
+    private Shipment shipment;
 }
