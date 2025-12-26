@@ -4,24 +4,31 @@ import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
-    // REQUIRED by evaluator
     public UserServiceImpl() {}
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
+        }
+
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
         if (user.getRole() == null || user.getRole().isBlank()) {
@@ -39,7 +46,6 @@ public class UserServiceImpl implements UserService {
                 );
     }
 
-    // REQUIRED by hidden tests
     public User findById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
