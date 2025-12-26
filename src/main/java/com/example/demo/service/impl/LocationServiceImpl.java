@@ -18,23 +18,16 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Location createLocation(Location l) {
+
         if (l.getLatitude() < -90 || l.getLatitude() > 90) {
             throw new IllegalArgumentException("Invalid latitude");
         }
-        if (l.getLongitude() < -180 || l.getLongitude() > 180) {
-            throw new IllegalArgumentException("Invalid longitude");
-        }
+
         return repo.save(l);
     }
 
     @Override
     public List<Location> getAllLocations() {
         return repo.findAll();
-    }
-
-    @Override
-    public Location findById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
     }
 }
