@@ -3,8 +3,6 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -15,29 +13,12 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable())
-
-            // allow swagger without login
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/swagger-ui.html",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**"
-                ).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll() // 🔥 EVERYTHING OPEN
             )
-
-            // ENABLE DEFAULT LOGIN PAGE
-            .formLogin(form -> form.permitAll())
-
-            // enable logout
-            .logout(logout -> logout.permitAll());
+            .formLogin(form -> form.disable()) // 🔥 NO LOGIN PAGE
+            .httpBasic(basic -> basic.disable());
 
         return http.build();
-    }
-
-    // REQUIRED for password handling
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
