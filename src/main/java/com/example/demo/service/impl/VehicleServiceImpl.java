@@ -22,7 +22,7 @@ public class VehicleServiceImpl implements VehicleService {
         this.userRepository = userRepository;
     }
 
-   @Override
+  @Override
 public Vehicle addVehicle(Long userId, Vehicle vehicle) {
 
     if (vehicle.getCapacityKg() <= 0) {
@@ -30,7 +30,7 @@ public Vehicle addVehicle(Long userId, Vehicle vehicle) {
     }
 
     User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
     vehicle.setUser(user);
     return vehicleRepository.save(vehicle);
