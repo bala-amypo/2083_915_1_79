@@ -1,5 +1,14 @@
-package main.java.com.example.demo.service;
+package com.example.demo.service;
 
-public class LocationService {
-    
+import com.example.demo.entity.Location;
+
+import java.util.List;
+
+public interface LocationService {
+
+    Location createLocation(Location location);
+
+    List<Location> getAllLocations();
+
+    Location findById(Long id);
 }
