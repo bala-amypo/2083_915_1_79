@@ -10,18 +10,16 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
-
     private String name;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
-    private String password;
-
+    private String password;   // ✅ add this
     private String role;
+
+    // getters and setters
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

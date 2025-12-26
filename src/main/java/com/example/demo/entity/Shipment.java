@@ -11,23 +11,30 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Shipment {
+    @Id @GeneratedValue
+    private Long id;
+    private double weightKg;       // ✅ add
+    private LocalDate scheduledDate; // ✅ add
 
-    @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+    @ManyToOne private Vehicle vehicle;
+    @ManyToOne private Location pickupLocation;
+    @ManyToOne private Location dropLocation;
 
+    // getters/setters
+    public double getWeightKg() { return weightKg; }
+    public void setWeightKg(double weightKg) { this.weightKg = weightKg; }
 
-    @ManyToOne
-    private Vehicle vehicle;
+    public LocalDate getScheduledDate() { return scheduledDate; }
+    public void setScheduledDate(LocalDate scheduledDate) { this.scheduledDate = scheduledDate; }
 
-    @ManyToOne
-    private Location pickupLocation;
+    public Vehicle getVehicle() { return vehicle; }
+    public void setVehicle(Vehicle vehicle) { this.vehicle = vehicle; }
 
-    @ManyToOne
-    private Location dropLocation;
+    public Location getPickupLocation() { return pickupLocation; }
+    public void setPickupLocation(Location pickupLocation) { this.pickupLocation = pickupLocation; }
 
-    private Double weightKg;
-
-    private LocalDate scheduledDate;
+    public Location getDropLocation() { return dropLocation; }
+    public void setDropLocation(Location dropLocation) { this.dropLocation = dropLocation; }
 }

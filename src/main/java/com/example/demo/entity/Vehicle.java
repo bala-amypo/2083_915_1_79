@@ -9,20 +9,24 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Vehicle {
-
-    @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
-
-
-    @Column(unique = true)
-    private String vehicleNumber;
-
-    private Double capacityKg;
-
-    private Double fuelEfficiency;
+    @Id @GeneratedValue
+    private Long id;
+    private String number;
+    private double capacityKg;     // ✅ add
+    private double fuelEfficiency; // ✅ add
 
     @ManyToOne
     private User user;
+
+    // getters/setters
+    public double getCapacityKg() { return capacityKg; }
+    public void setCapacityKg(double capacityKg) { this.capacityKg = capacityKg; }
+
+    public double getFuelEfficiency() { return fuelEfficiency; }
+    public void setFuelEfficiency(double fuelEfficiency) { this.fuelEfficiency = fuelEfficiency; }
+
+    public void setUser(User user) { this.user = user; }
 }
+

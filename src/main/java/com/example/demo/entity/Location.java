@@ -9,16 +9,19 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Location {
+    @Id @GeneratedValue
+    private Long id;
+    private double latitude;   // ✅ add
+    private double longitude;  // ✅ add
 
-   @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+    // getters/setters
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
 
-
-    private String name;
-
-    private Double latitude;
-
-    private Double longitude;
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+}
+ Double longitude;
 }
