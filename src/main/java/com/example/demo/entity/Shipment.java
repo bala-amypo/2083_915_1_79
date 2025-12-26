@@ -17,7 +17,7 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double weight;
+    private double weightKg;
 
     // ✅ THIS IS WHAT TESTS EXPECT
     private LocalDate scheduledDate;
