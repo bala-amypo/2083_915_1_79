@@ -31,18 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            Claims claims = jwtUtil.validateToken(token).getBody();
 
+            if (jwtUtil.validateToken(token)) {
+                Claims claims = jwtUtil.getClaims(token);
+                String email = claims.getSubject();
 
-            String email = claims.getSubject();
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                email, null, List.of()
+                        );
 
-UsernamePasswordAuthenticationToken auth =
-        new UsernamePasswordAuthenticationToken(
-                email, null, List.of()
-        );
-
-SecurityContextHolder.getContext().setAuthentication(auth);
-
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
 
         filterChain.doFilter(request, response);
