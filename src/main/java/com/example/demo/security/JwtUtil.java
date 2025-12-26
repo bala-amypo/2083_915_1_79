@@ -15,11 +15,12 @@ public class JwtUtil {
 
     // REQUIRED by Spring
     public JwtUtil() {
-        this.key = Keys.hmacShaKeyFor(
-                "this-is-a-very-secure-secret-key-1234567890".getBytes()
-        );
-        this.expirationMs = 1000 * 60; // 1 minute
-    }
+    this.key = Keys.hmacShaKeyFor(
+            "this-is-a-very-secure-secret-key-1234567890".getBytes()
+    );
+    this.expirationMs = 1000; // 🔥 1 second ONLY
+}
+
 
     // REQUIRED by tests
     public JwtUtil(String secret, int expirationSeconds) {
@@ -29,15 +30,16 @@ public class JwtUtil {
 
     // REQUIRED by tests
     public String generateToken(Long userId, String email, String role) {
-        return Jwts.builder()
-                .setSubject(email)
-                .claim("userId", userId)
-                .claim("role", role)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
+    return Jwts.builder()
+            .setSubject(email)        // 🔥 REQUIRED
+            .claim("userId", userId)
+            .claim("role", role)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
+}
+
 
     // Backward compatibility
     public String generateToken(Long userId, String email) {
@@ -46,13 +48,14 @@ public class JwtUtil {
 
     // 🔥🔥🔥 THIS IS THE KEY FIX 🔥🔥🔥
     public Jws<Claims> validateToken(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new RuntimeException("Invalid token");
-        }
+    try {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
+    } catch (JwtException | IllegalArgumentException e) {
+        throw new RuntimeException("Invalid token");
     }
+}
+
 }

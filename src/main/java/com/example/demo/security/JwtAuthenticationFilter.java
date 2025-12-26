@@ -36,14 +36,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String email = claims.getSubject();
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            List.of()
-                    );
+UsernamePasswordAuthenticationToken auth =
+        new UsernamePasswordAuthenticationToken(
+                email, null, List.of()
+        );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+SecurityContextHolder.getContext().setAuthentication(auth);
+
         }
 
         filterChain.doFilter(request, response);
