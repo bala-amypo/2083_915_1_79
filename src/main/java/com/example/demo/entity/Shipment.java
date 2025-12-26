@@ -6,15 +6,17 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Shipment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     @ManyToOne
     private Vehicle vehicle;

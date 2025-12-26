@@ -4,16 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
 
+
+    @Column(unique = true)
     private String vehicleNumber;
 
     private Double capacityKg;
