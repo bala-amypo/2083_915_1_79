@@ -10,46 +10,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder;  // ✅ Injected bean
 
-    public UserServiceImpl() {}
-
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    // ✅ Constructor injection ensures Spring provides the PasswordEncoder bean
+    public UserServiceImpl(UserRepository repo, PasswordEncoder passwordEncoder) {
+        this.repo = repo;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
-        if (user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            user.setRole("USER");
-        }
-
-        return userRepository.save(user);
+        // ✅ Encode password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repo.save(user);
     }
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found")
-                );
-    }
-
-    public User findById(long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found")
-                );
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
