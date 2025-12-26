@@ -39,6 +39,15 @@ if (vehicle.getFuelEfficiency() == null || vehicle.getFuelEfficiency() <= 0) {
         vehicle.setUser(user);
         return repo.save(vehicle);
     }
+    @Override
+public Vehicle addVehicle(Long userId, Vehicle vehicle) {
+    if (vehicle.getCapacity() <= 0) {
+        throw new IllegalArgumentException("Vehicle capacity must be positive");
+    }
+    User user = userService.findById(userId);
+    vehicle.setUser(user);
+    return vehicleRepository.save(vehicle);
+}
 
     @Override
     public List<Vehicle> getVehiclesByUser(Long userId) {

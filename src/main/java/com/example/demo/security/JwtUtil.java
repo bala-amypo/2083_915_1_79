@@ -1,79 +1,52 @@
-/*
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private Key key;
-    private long expirationMs;
+    private static final String SECRET = "mysecretkeymysecretkeymysecretkey123"; // at least 32 chars
+    private static final long EXPIRATION = 1000 * 60 * 60; // 1 hour
 
-    // REQUIRED by evaluator
-    public JwtUtil() {
-        this.key = Keys.hmacShaKeyFor(
-                "defaultdefaultdefaultdefaultdefault".getBytes()
-        );
-        this.expirationMs = 3600000;
-    }
+    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    // Optional constructor
-    public JwtUtil(String secret, long expirationMs) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expirationMs = expirationMs;
-    }
-
-    public String generateToken(Long userId, String email, String role) {
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + expirationMs);
-
+    public String generateToken(String email, Long userId, String role) {
         return Jwts.builder()
                 .setSubject(email)
-                .claim("userId", userId)
-                .claim("role", role)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
+                .addClaims(Map.of(
+                        "userId", userId,
+                        "role", role
+                ))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Jws<Claims> validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid token");
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false; // ✅ don’t throw, return false so tests can assert
         }
     }
-}
-*/
-package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-
-public class JwtUtil {
-
-    public JwtUtil(String secret, long expirationMs) {
-        // Dummy constructor (required by tests)
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(Long userId, String email, String role) {
-        // Dummy token (tests DO NOT validate content)
-        return "dummy-jwt-token";
+    public String extractRole(String token) {
+        return extractClaims(token).get("role", String.class);
     }
 
-    public Jws<Claims> validateToken(String token) {
-        throw new RuntimeException("Invalid token");
+    public Long extractUserId(String token) {
+        return extractClaims(token).get("userId", Long.class);
     }
 }
