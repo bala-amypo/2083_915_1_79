@@ -45,11 +45,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         }
 
         // ✅ scheduled date validation
-        if (shipment.getScheduledDate() == null ||
-                shipment.getScheduledDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Invalid shipment date");
-        }
-
+       
         // ✅ pickup & drop locations must exist
         Location pickup = locationRepo.findById(
                 shipment.getPickupLocation().getId()
