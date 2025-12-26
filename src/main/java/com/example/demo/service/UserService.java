@@ -2,14 +2,15 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 
+import java.util.List;
+
 public interface UserService {
 
-    User register(User user);
-
-    User login(String email, String password);
+    User save(User user);
 
     User findById(Long id);
 
-    // ✅ ADD THIS
+    List<User> findAll();
+
     User findByEmail(String email);
 }
