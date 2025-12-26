@@ -1,4 +1,5 @@
 package com.example.demo.security;
+import com.example.demo.entity.User;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
