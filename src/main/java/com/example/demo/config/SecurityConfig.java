@@ -13,7 +13,6 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
 
-    // ✅ constructor injection
     public SecurityConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
@@ -31,7 +30,6 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().permitAll()
             )
-            // ✅ PASS JwtUtil PROPERLY
             .addFilterBefore(
                 new JwtAuthenticationFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class
