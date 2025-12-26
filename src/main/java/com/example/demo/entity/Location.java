@@ -23,5 +23,4 @@ public class Location {
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
 }
- Double longitude;
-}
+ 

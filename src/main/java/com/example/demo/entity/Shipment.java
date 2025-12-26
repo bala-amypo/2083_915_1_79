@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+
 public class Shipment {
     @Id @GeneratedValue
     private Long id;
