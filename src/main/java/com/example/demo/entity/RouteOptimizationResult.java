@@ -1,30 +1,31 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-
 public class RouteOptimizationResult {
     @Id @GeneratedValue
     private Long id;
-    private double optimizedDistanceKm;   // ✅ add
-    private double estimatedFuelUsageL;   // ✅ add
-    private LocalDateTime generatedAt;    // ✅ add
+    private Double optimizedDistanceKm;
+    private Double estimatedFuelUsageL;
+    private LocalDateTime generatedAt;
 
     @OneToOne private Shipment shipment;
 
     // getters/setters
-    public void setShipment(Shipment shipment) { this.shipment = shipment; }
-    public void setOptimizedDistanceKm(double km) { this.optimizedDistanceKm = km; }
-    public void setEstimatedFuelUsageL(double fuel) { this.estimatedFuelUsageL = fuel; }
-    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
-}
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
+    public Double getOptimizedDistanceKm() { return optimizedDistanceKm; }
+    public void setOptimizedDistanceKm(Double optimizedDistanceKm) { this.optimizedDistanceKm = optimizedDistanceKm; }
+
+    public Double getEstimatedFuelUsageL() { return estimatedFuelUsageL; }
+    public void setEstimatedFuelUsageL(Double estimatedFuelUsageL) { this.estimatedFuelUsageL = estimatedFuelUsageL; }
+
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
+    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
+
+    public Shipment getShipment() { return shipment; }
+    public void setShipment(Shipment shipment) { this.shipment = shipment; }
+}

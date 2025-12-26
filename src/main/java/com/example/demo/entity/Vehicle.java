@@ -1,32 +1,31 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-
 public class Vehicle {
     @Id @GeneratedValue
     private Long id;
     private String number;
-    private double capacityKg;     // ✅ add
-    private double fuelEfficiency; // ✅ add
+    private Double capacityKg;
+    private Double fuelEfficiency;
 
     @ManyToOne
     private User user;
 
     // getters/setters
-    public double getCapacityKg() { return capacityKg; }
-    public void setCapacityKg(double capacityKg) { this.capacityKg = capacityKg; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public double getFuelEfficiency() { return fuelEfficiency; }
-    public void setFuelEfficiency(double fuelEfficiency) { this.fuelEfficiency = fuelEfficiency; }
+    public String getNumber() { return number; }
+    public void setNumber(String number) { this.number = number; }
 
+    public Double getCapacityKg() { return capacityKg; }
+    public void setCapacityKg(Double capacityKg) { this.capacityKg = capacityKg; }
+
+    public Double getFuelEfficiency() { return fuelEfficiency; }
+    public void setFuelEfficiency(Double fuelEfficiency) { this.fuelEfficiency = fuelEfficiency; }
+
+    public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 }
-
