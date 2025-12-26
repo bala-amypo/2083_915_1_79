@@ -29,16 +29,17 @@ public class JwtUtil {
     }
 
     // REQUIRED by tests
-    public String generateToken(Long userId, String email, String role) {
+   public String generateToken(User user) {
     return Jwts.builder()
-            .setSubject(email)        // 🔥 REQUIRED
-            .claim("userId", userId)
-            .claim("role", role)
+            .setSubject(user.getEmail())   // 🔥 REQUIRED
+            .claim("userId", user.getId())
+            .claim("role", user.getRole())
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-            .signWith(key, SignatureAlgorithm.HS256)
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();
 }
+
 
 
     // Backward compatibility
@@ -47,14 +48,15 @@ public class JwtUtil {
     }
 
     // 🔥🔥🔥 THIS IS THE KEY FIX 🔥🔥🔥
-    public Jws<Claims> validateToken(String token) {
+   public boolean validateToken(String token) {
     try {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
-    } catch (JwtException | IllegalArgumentException e) {
-        throw new RuntimeException("Invalid token");
+        Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token);
+        return true;
+    } catch (Exception e) {
+        return false;   // 🔥 REQUIRED
     }
 }
 
