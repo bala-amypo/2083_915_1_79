@@ -2,51 +2,50 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
 
-@Component
 public class JwtUtil {
 
-    private static final String SECRET = "mysecretkeymysecretkeymysecretkey123"; // at least 32 chars
-    private static final long EXPIRATION = 1000 * 60 * 60; // 1 hour
+    private static final Key SECRET_KEY =
+            Keys.hmacShaKeyFor("this-is-a-very-secure-secret-key-256bit".getBytes());
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    private static final long EXPIRATION_MS = 1000 * 60 * 60; // 1 hour
 
-    public String generateToken(String email, Long userId, String role) {
+    public static String generateToken(Long userId, String role) {
+
         return Jwts.builder()
-                .setSubject(email)
-                .addClaims(Map.of(
-                        "userId", userId,
-                        "role", role
-                ))
+                .setSubject(String.valueOf(userId))
+                .claim("userId", userId)
+                .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public static Claims validateToken(String token) {
+
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
+            return Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("Token expired");
         } catch (JwtException e) {
-            return false; // ✅ don’t throw, return false so tests can assert
+            throw new RuntimeException("Invalid token");
         }
     }
 
-    public Claims extractClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    public static Long extractUserId(String token) {
+        return validateToken(token).get("userId", Long.class);
     }
 
-    public String extractRole(String token) {
-        return extractClaims(token).get("role", String.class);
-    }
-
-    public Long extractUserId(String token) {
-        return extractClaims(token).get("userId", Long.class);
+    public static String extractRole(String token) {
+        return validateToken(token).get("role", String.class);
     }
 }
