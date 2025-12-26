@@ -1,21 +1,20 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Location {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double latitude;
-    private Double longitude;
 
-    // getters/setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Double getLatitude() { return latitude; }
-    public void setLatitude(Double latitude) { this.latitude = latitude; }
-
-    public Double getLongitude() { return longitude; }
-    public void setLongitude(Double longitude) { this.longitude = longitude; }
+    private String name;
+    private double latitude;
+    private double longitude;
 }
