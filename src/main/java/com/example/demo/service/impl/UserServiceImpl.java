@@ -17,8 +17,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User register(User user) {
+        // No password encoding (security removed intentionally)
+        return userRepository.save(user);
+    }
+
+    @Override
     public User save(User user) {
-        // NO password encoding (security removed)
         return userRepository.save(user);
     }
 
