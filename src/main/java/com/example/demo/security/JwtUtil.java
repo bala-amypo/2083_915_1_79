@@ -6,43 +6,47 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET =
-            "my-secret-key-my-secret-key-my-secret-key"; // >= 256 bits
+    private final Key key;
+    private final long expirationMs;
 
-    private static final long EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
+    // REQUIRED by Spring
+    public JwtUtil() {
+        this("this-is-a-very-secure-secret-key-1234567890", 3600);
+    }
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    // REQUIRED by tests
+    public JwtUtil(String secret, int expirationSeconds) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationMs = expirationSeconds * 1000L;
+    }
 
-    /* ============================================================
-       REQUIRED BY TESTS
-       ============================================================ */
-
-    // 🔥 THIS METHOD IS MISSING — ADD IT
+    // REQUIRED by tests
     public String generateToken(Long userId, String email, String role) {
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
-        claims.put("role", role);
-
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(email)                 // IMPORTANT
+                .setSubject(email)
+                .claim("userId", userId)
+                .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    /* ============================================================
-       SUPPORTING METHODS
-       ============================================================ */
+    // Backward compatibility
+    public String generateToken(Long userId, String email) {
+        return generateToken(userId, email, "USER");
+    }
 
+    // REQUIRED
+    public Claims validateToken(String token) {
+        return extractAllClaims(token);
+    }
+
+    // Used internally & by filter
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -50,28 +54,9 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    // Backward compatibility
     public Claims extractClaims(String token) {
-    return extractAllClaims(token);
-}
-
-    public String extractEmail(String token) {
-        return extractAllClaims(token).getSubject();
-    }
-
-    public Long extractUserId(String token) {
-        return extractAllClaims(token).get("userId", Long.class);
-    }
-
-    public String extractRole(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            extractAllClaims(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
+        return extractAllClaims(token);
     }
 }
