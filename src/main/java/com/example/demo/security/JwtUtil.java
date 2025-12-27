@@ -1,6 +1,6 @@
+
 package com.example.demo.security;
 
-import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class JwtUtil {
     private final Key key;
     private final long expirationMs;
 
-    // Default constructor for Spring
+    // Default constructor (Spring)
     public JwtUtil() {
         this.key = Keys.hmacShaKeyFor(
                 "this-is-a-very-secure-secret-key-1234567890".getBytes()
@@ -23,49 +23,28 @@ public class JwtUtil {
     }
 
     // Constructor used by tests
-    public JwtUtil(String secret, int expirationSeconds) {
+    public JwtUtil(String secret, int expirationMs) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expirationMs = expirationSeconds * 1000L;
+        this.expirationMs = expirationMs;
     }
 
-    // 🔥 MAIN TOKEN GENERATOR (TESTED)
-    public String generateToken(User user) {
+    // REQUIRED BY TESTS
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .setSubject(user.getEmail())              // ✅ REQUIRED
-                .claim("userId", user.getId())
-                .claim("role", user.getRole())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    // Backward compatibility
-    public String generateToken(Long userId, String email) {
-        return Jwts.builder()
-                .setSubject(email)                        // ✅ REQUIRED
+                .setSubject(email)
                 .claim("userId", userId)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // 🔥 VALIDATE + RETURN CLAIMS
-    public Claims extractClaims(String token) {
+    // REQUIRED BY TESTS
+    public Jws<Claims> validateToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            extractClaims(token);
-            return true;
-        } catch (JwtException e) {
-            return false;
-        }
+                .parseClaimsJws(token);
     }
 }
