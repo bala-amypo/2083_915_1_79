@@ -28,6 +28,9 @@ public Vehicle addVehicle(Long userId, Vehicle vehicle) {
     if (vehicle.getCapacityKg() <= 0) {
         throw new IllegalArgumentException("Vehicle capacity must be positive");
     }
+    if (vehicle.getCapacityKg() == null || vehicle.getCapacityKg() <= 0) {
+    throw new IllegalArgumentException("Capacity must be positive");
+}
 
     User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));

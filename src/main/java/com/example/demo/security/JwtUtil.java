@@ -1,6 +1,5 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -14,31 +13,21 @@ public class JwtUtil {
     private final Key key;
     private final long expirationMs;
 
-    // Spring default constructor
+    // Default constructor (Spring)
     public JwtUtil() {
         this.key = Keys.hmacShaKeyFor(
                 "this-is-a-very-secure-secret-key-1234567890".getBytes()
         );
-        this.expirationMs = 1000; // 1 second (tests expect expiry)
+        this.expirationMs = 60 * 60 * 1000; // 1 hour
     }
 
-    // Test constructor
-    public JwtUtil(String secret, int expirationSeconds) {
+    // Constructor used by tests
+    public JwtUtil(String secret, int expirationMs) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expirationMs = expirationSeconds * 1000L;
+        this.expirationMs = expirationMs;
     }
 
-    // REQUIRED by tests
-    public String generateToken(User user) {
-        return generateToken(user.getId(), user.getEmail(), user.getRole());
-    }
-
-    // REQUIRED by tests
-    public String generateToken(Long userId, String email) {
-        return generateToken(userId, email, "USER");
-    }
-
-    // 🔥 REQUIRED SIGNATURE
+    // REQUIRED BY TESTS
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
@@ -50,32 +39,11 @@ public class JwtUtil {
                 .compact();
     }
 
-    public Claims getClaims(String token) {
+    // REQUIRED BY TESTS
+    public Jws<Claims> validateToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            getClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean isTokenExpired(String token) {
-        try {
-            return getClaims(token).getExpiration().before(new Date());
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
-    public String getEmailFromToken(String token) {
-        return getClaims(token).getSubject();
+                .parseClaimsJws(token);
     }
 }
