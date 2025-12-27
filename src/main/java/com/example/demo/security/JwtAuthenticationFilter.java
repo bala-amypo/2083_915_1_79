@@ -1,3 +1,4 @@
+
 package com.example.demo.security;
 
 import io.jsonwebtoken.Claims;
@@ -27,26 +28,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        String header = request.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
 
-            String token = authHeader.substring(7);
-
-            // 🔥 THIS LINE IS THE FIX
-            Claims claims = jwtUtil.validateToken(token);
-
+            Claims claims = jwtUtil.validateToken(token).getBody();
             String email = claims.getSubject();
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            List.of()
-                    );
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(email, null, List.of());
 
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);
