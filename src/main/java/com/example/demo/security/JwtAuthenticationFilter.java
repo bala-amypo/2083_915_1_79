@@ -1,4 +1,3 @@
-
 package com.example.demo.security;
 
 import io.jsonwebtoken.Claims;
@@ -33,13 +32,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
-            Claims claims = jwtUtil.validateToken(token).getBody();
-            String email = claims.getSubject();
+            if (jwtUtil.validateToken(token)) {
+                Claims claims = jwtUtil.extractClaims(token);
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of());
+                String email = claims.getSubject(); // ✅ TEST EXPECTS THIS
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of()
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
 
         filterChain.doFilter(request, response);
