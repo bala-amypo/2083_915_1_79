@@ -143,33 +143,26 @@
 
             <!-- Compiler -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <release>17</release>
-                </configuration>
-            </plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.5.4</version>
+    <configuration>
+        <!--  Disable JUnit Platform COMPLETELY -->
+        <useJUnitPlatform>false</useJUnitPlatform>
 
-            <!-- Spring Boot -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+        <!--  Force TestNG -->
+        <testNGArtifactName>org.testng:testng</testNGArtifactName>
 
-            <!--  FORCE TESTNG -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
-                <configuration>
-                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
-                    <useModulePath>false</useModulePath>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
+        <!-- Required for Java 17 -->
+        <useModulePath>false</useModulePath>
+
+        <!-- Explicit test pattern -->
+        <includes>
+            <include>**/*Test.java</include>
+        </includes>
+    </configuration>
+</plugin>
+
 
         </plugins>
     </build>
