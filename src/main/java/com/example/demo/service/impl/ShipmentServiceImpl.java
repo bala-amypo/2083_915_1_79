@@ -58,6 +58,15 @@ if (shipment.getScheduledDate().isBefore(LocalDate.now())) {
         Location drop = locationRepo.findById(
                 shipment.getDropLocation().getId()
         ).orElseThrow(() -> new ResourceNotFoundException("Drop location not found"));
+        if (shipment.getPickupLocation() == null ||
+    shipment.getPickupLocation().getId() == null) {
+    throw new IllegalArgumentException("Pickup location is required");
+}
+
+if (shipment.getDropLocation() == null ||
+    shipment.getDropLocation().getId() == null) {
+    throw new IllegalArgumentException("Drop location is required");
+}
 
         shipment.setVehicle(vehicle);
         shipment.setPickupLocation(pickup);
@@ -65,7 +74,7 @@ if (shipment.getScheduledDate().isBefore(LocalDate.now())) {
 
         return shipmentRepo.save(shipment);
     }
-
+    
     @Override
     public Shipment getShipment(Long shipmentId) {
         return shipmentRepo.findById(shipmentId)
