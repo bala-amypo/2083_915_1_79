@@ -39,6 +39,7 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+    
 
     // REQUIRED BY TESTS
     public Jws<Claims> validateToken(String token) {
