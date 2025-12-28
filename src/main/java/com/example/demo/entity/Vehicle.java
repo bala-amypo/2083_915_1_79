@@ -5,7 +5,7 @@ import lombok.*;
 
 @Entity
 @Getter
-//@Table(name="vehicle")
+@Table(name="vehicles")
 @Setter
 @Builder
 @NoArgsConstructor
