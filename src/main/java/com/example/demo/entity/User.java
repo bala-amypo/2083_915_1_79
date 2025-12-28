@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")   // IMPORTANT: avoids H2 keyword "user"
+@Table(name = "user")   // IMPORTANT: avoids H2 keyword "user"
 @Getter
 @Setter
 @Builder
