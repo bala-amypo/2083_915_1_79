@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name="optimize")
+@Table(name="route_optimization_results")
 @Setter
 @Builder
 @NoArgsConstructor
