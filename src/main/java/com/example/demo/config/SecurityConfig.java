@@ -29,7 +29,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ REQUIRED BY TESTS
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
