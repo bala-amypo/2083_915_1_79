@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    // ✅ Add this method so tests compile
     @Override
     public User findById(Long id) {
         return repo.findById(id)

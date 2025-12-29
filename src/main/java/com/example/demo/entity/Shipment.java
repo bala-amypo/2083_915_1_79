@@ -20,7 +20,6 @@ public class Shipment {
 
     private double weightKg;
 
-    // ✅ THIS IS WHAT TESTS EXPECT
     private LocalDate scheduledDate;
 
     @ManyToOne

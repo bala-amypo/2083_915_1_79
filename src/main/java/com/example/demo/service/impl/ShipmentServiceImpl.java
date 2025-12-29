@@ -38,19 +38,14 @@ if (shipment.getScheduledDate().isBefore(LocalDate.now())) {
 
 
 
-        // ✅ weight must be positive
         if (shipment.getWeightKg() <= 0) {
             throw new IllegalArgumentException("Invalid weight");
         }
 
-        // ✅ weight must not exceed capacity
         if (shipment.getWeightKg() > vehicle.getCapacityKg()) {
             throw new IllegalArgumentException("Weight exceeds vehicle capacity");
         }
 
-        // ✅ scheduled date validation
-       
-        // ✅ pickup & drop locations must exist
         Location pickup = locationRepo.findById(
                 shipment.getPickupLocation().getId()
         ).orElseThrow(() -> new ResourceNotFoundException("Pickup location not found"));
